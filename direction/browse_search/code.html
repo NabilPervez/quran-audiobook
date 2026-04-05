@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Browse - The Sacred Stream</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-secondary-fixed": "#002108",
+                "on-tertiary-container": "#730a1b",
+                "error-container": "#93000a",
+                "tertiary": "#ffb3b3",
+                "primary-container": "#1db954",
+                "inverse-on-surface": "#313030",
+                "on-tertiary-fixed": "#400009",
+                "on-primary-fixed-variant": "#005320",
+                "inverse-primary": "#006e2d",
+                "on-secondary-fixed-variant": "#195127",
+                "on-surface-variant": "#bccbb9",
+                "inverse-surface": "#e5e2e1",
+                "surface-dim": "#131313",
+                "tertiary-container": "#ff767b",
+                "on-surface": "#e5e2e1",
+                "on-background": "#e5e2e1",
+                "surface": "#131313",
+                "secondary": "#99d59d",
+                "primary": "#53e076",
+                "on-error": "#690005",
+                "surface-tint": "#53e076",
+                "surface-bright": "#393939",
+                "tertiary-fixed-dim": "#ffb3b3",
+                "on-primary-fixed": "#002108",
+                "primary-fixed-dim": "#53e076",
+                "surface-variant": "#353534",
+                "secondary-fixed-dim": "#99d59d",
+                "surface-container-highest": "#353534",
+                "on-error-container": "#ffdad6",
+                "surface-container-low": "#1c1b1b",
+                "on-tertiary-fixed-variant": "#881d28",
+                "outline": "#869585",
+                "on-secondary": "#003914",
+                "on-primary-container": "#004118",
+                "surface-container": "#201f1f",
+                "primary-fixed": "#72fe8f",
+                "on-primary": "#003914",
+                "surface-container-high": "#2a2a2a",
+                "error": "#ffb4ab",
+                "outline-variant": "#3d4a3d",
+                "on-tertiary": "#680114",
+                "secondary-container": "#1c5329",
+                "tertiary-fixed": "#ffdad9",
+                "surface-container-lowest": "#0e0e0e",
+                "secondary-fixed": "#b5f1b8",
+                "on-secondary-container": "#8cc690",
+                "background": "#131313"
+            },
+            "fontFamily": {
+                "headline": ["Plus Jakarta Sans"],
+                "body": ["Plus Jakarta Sans"],
+                "label": ["Plus Jakarta Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #131313; color: #e5e2e1; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-player { backdrop-filter: blur(24px); background: rgba(19, 19, 19, 0.7); }
+        .category-card { transition: transform 0.2s ease, background-color 0.2s ease; }
+        .category-card:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar (Desktop) -->
+<aside class="h-screen w-64 hidden lg:flex flex-col sticky top-0 left-0 bg-[#131313] p-6 gap-y-4 font-['Plus_Jakarta_Sans'] text-sm tracking-tight">
+<div class="mb-8">
+<h1 class="text-xl font-bold tracking-tighter text-[#53E076]">The Sacred Stream</h1>
+<p class="text-[10px] text-[#BCCBB9] tracking-widest uppercase mt-1">Premium Quran Audio</p>
+</div>
+<nav class="flex flex-col gap-y-2">
+<a class="flex items-center gap-4 px-2 py-2 text-[#BCCBB9] hover:text-[#53E076] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<a class="flex items-center gap-4 px-2 py-2 text-[#53E076] font-bold" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span>Browse</span>
+</a>
+<a class="flex items-center gap-4 px-2 py-2 text-[#BCCBB9] hover:text-[#53E076] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">library_music</span>
+<span>Your Library</span>
+</a>
+<a class="flex items-center gap-4 px-2 py-2 text-[#BCCBB9] hover:text-[#53E076] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span>Liked Surahs</span>
+</a>
+<a class="flex items-center gap-4 px-2 py-2 text-[#BCCBB9] hover:text-[#53E076] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">playlist_play</span>
+<span>Playlists</span>
+</a>
+</nav>
+<div class="mt-auto pt-6">
+<div class="bg-surface-container-high p-4 rounded-xl flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="minimalist avatar of a person with a clean modern aesthetic for a user profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkj4eh9ELSYaOs4yPt1CujuVsMDBvill6lFpI6Ach81QQ8fmYlWXW1kG36pk5WU1BcPsB-iavS4G3jJlqJg5rTXcKZd8XkKusTRs5kXV2G9zQNRikyvcGtKPwnLhPgOU56Tp_ZQQDkYJRpLAP6Q6aYiZXMg2Rkkguime9bilVdYqJw-2elQH-73_SZq1_zRhxCuRbQdjJyFkwkkr0fuSCTAvkgI2vxelXvyd3Ygt8CXUnKe-f50he1N4mLc57kadAacPmPUCm_rG6Y"/>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Abdullah</p>
+<p class="text-[10px] text-on-surface-variant">Premium Member</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col relative min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-8 h-20 sticky top-0 z-40 bg-[#131313]/70 backdrop-blur-3xl">
+<div class="flex items-center gap-4 flex-1 max-w-2xl">
+<div class="flex gap-2 mr-4 hidden md:flex">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center text-on-surface hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-sm">arrow_back_ios</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center text-on-surface hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-high border-none rounded-full py-3 pl-12 pr-4 text-sm font-medium focus:ring-1 focus:ring-primary/30 placeholder:text-on-surface-variant transition-all outline-none" placeholder="What do you want to listen to?" type="text"/>
+</div>
+</div>
+<div class="ml-4 flex items-center gap-4">
+<button class="lg:hidden text-on-surface">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Page Canvas -->
+<section class="px-8 pt-6">
+<h2 class="text-2xl font-extrabold tracking-tight mb-8 font-headline">Browse All</h2>
+<!-- Bento Grid Categories -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+<!-- Makkah Surahs -->
+<div class="category-card relative overflow-hidden aspect-square rounded-xl p-4 cursor-pointer bg-[#8C33FF]">
+<h3 class="text-xl font-bold tracking-tight">Makkah Surahs</h3>
+<div class="absolute -bottom-2 -right-4 w-28 h-28 rotate-12 opacity-80">
+<img class="w-full h-full object-cover rounded-lg shadow-2xl" data-alt="architectural detail of the grand mosque in makkah with intricate geometric patterns and warm sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv6hCgW4VqaQxVKo5c37PBFOhtXEwCG2tdtP952wzMFqjerAcrEVfH3SjMW4d1NekkBmJ3oQikdRase5cCypd4E5YCXGNq89V8wyMnbY09lB3t6BUtpEg-CzHRqL61aK-AeGrZZo10ZQU8FFPTIBHeI4uGq8ONjKkBTjKRhlL9qjnfM3ITCUEPBTwWR0ovUU6wGptXbAkJFzI2PwK_6Kvn0_A_af4bi0YI9oLE2V9Ve8LqSKeRIDQ7FvLbp7wybJRI16a1h4ZkZ1iF"/>
+</div>
+</div>
+<!-- Madinah Surahs -->
+<div class="category-card relative overflow-hidden aspect-square rounded-xl p-4 cursor-pointer bg-[#1DB954]">
+<h3 class="text-xl font-bold tracking-tight">Madinah Surahs</h3>
+<div class="absolute -bottom-2 -right-4 w-28 h-28 -rotate-6 opacity-80">
+<img class="w-full h-full object-cover rounded-lg shadow-2xl" data-alt="green dome of the prophet's mosque in madinah under a clear blue sky with soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkH6EbMp8GqMWniO9LsA5m1UkVC1mHOJs5jvm6JNwRp-T2rtQyo4C1i3Qhw5NuWr_IPrW1mRO3YVfipE54dDjsM6l_F-NhzJdpPQufbwksKT1Uc0ibmtOkn3I7ZzgZBgs59BecoxfSODTREHXmsK5ASWTB_rQ7AuEKYRA36-uOhtC3LxnAxImv6VKPh9P6hX1mNdDrNmMdc5oq2ozEM0OlrND2BCBhEazQjCOkpbHCVWqrJskZjFlrd-2xdnc2t3czxI2Bd4-PdjoU"/>
+</div>
+</div>
+<!-- Patience -->
+<div class="category-card relative overflow-hidden aspect-square rounded-xl p-4 cursor-pointer bg-[#E91E63]">
+<h3 class="text-xl font-bold tracking-tight">Patience</h3>
+<span class="material-symbols-outlined absolute -bottom-4 -right-2 text-8xl opacity-20 rotate-12" style="font-variation-settings: 'FILL' 1;">hourglass_empty</span>
+</div>
+<!-- Gratitude -->
+<div class="category-card relative overflow-hidden aspect-square rounded-xl p-4 cursor-pointer bg-[#FF9800]">
+<h3 class="text-xl font-bold tracking-tight">Gratitude</h3>
+<span class="material-symbols-outlined absolute -bottom-4 -right-2 text-8xl opacity-20 -rotate-12" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<!-- Stories -->
+<div class="category-card relative overflow-hidden aspect-square rounded-xl p-4 cursor-pointer bg-[#2196F3]">
+<h3 class="text-xl font-bold tracking-tight">Stories of Prophets</h3>
+<span class="material-symbols-outlined absolute -bottom-4 -right-2 text-8xl opacity-20 rotate-45" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+</div>
+<!-- Juz -->
+<div class="category-card relative overflow-hidden aspect-square rounded-xl p-4 cursor-pointer bg-[#009688]">
+<h3 class="text-xl font-bold tracking-tight">By Juz</h3>
+<span class="material-symbols-outlined absolute -bottom-4 -right-2 text-8xl opacity-20" style="font-variation-settings: 'FILL' 1;">format_list_numbered</span>
+</div>
+<!-- Peace -->
+<div class="category-card relative overflow-hidden aspect-square rounded-xl p-4 cursor-pointer bg-[#3F51B5]">
+<h3 class="text-xl font-bold tracking-tight">Inner Peace</h3>
+<span class="material-symbols-outlined absolute -bottom-4 -right-2 text-8xl opacity-20 -rotate-6" style="font-variation-settings: 'FILL' 1;">spa</span>
+</div>
+<!-- Reciters -->
+<div class="category-card relative overflow-hidden aspect-square rounded-xl p-4 cursor-pointer bg-[#607D8B]">
+<h3 class="text-xl font-bold tracking-tight">Global Reciters</h3>
+<span class="material-symbols-outlined absolute -bottom-4 -right-2 text-8xl opacity-20" style="font-variation-settings: 'FILL' 1;">record_voice_over</span>
+</div>
+</div>
+</section>
+<!-- Subtle Background Accent (Asymmetry Rule) -->
+<div class="fixed top-1/2 right-0 -translate-y-1/2 w-96 h-96 bg-primary/5 blur-[120px] pointer-events-none -z-10"></div>
+</main>
+<!-- Persistent Player Bar -->
+<div class="fixed bottom-0 left-0 w-full z-50 glass-player px-4 py-3 md:px-8 border-t border-white/5 flex items-center justify-between gap-4">
+<!-- Track Info -->
+<div class="flex items-center gap-4 w-1/3 min-w-0">
+<div class="w-12 h-12 md:w-14 md:h-14 bg-surface-container-high rounded-md overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="close-up of an ornate quran page with gold calligraphy and beautiful arabesque patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS9AVCIgPzTbnTAWKUdTsKfBhl-jZexrS-tNsZP8ZCtJADr-mK1G-3mfpndMiNSNixeop9sdG7KI0Fi2HvP-8l1yOyo1xhmGvTXS2gBtLXfgIjsVQ9Cn6MvNWJPjC_BlzQTz5N2ub16wF10i1PQdLMbJXpv6MEIFA2Xe8aMRic36BjlAK7SNIexCmiJrIIXLzMuDb0DSxJfXh75B4Xw_epFEILnuDpZ8HSjCOrezynYQZUWS0sJb5W903uieZzt_aDlbNLP6gRXS2y"/>
+</div>
+<div class="truncate">
+<h4 class="text-sm font-bold truncate">Surah Al-Kahf</h4>
+<p class="text-xs text-on-surface-variant truncate">Mishary Rashid Alafasy</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<!-- Player Controls -->
+<div class="flex flex-col items-center gap-2 flex-1 max-w-xl">
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">shuffle</span></button>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">skip_previous</span></button>
+<button class="w-10 h-10 rounded-full bg-on-surface text-surface flex items-center justify-center hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">skip_next</span></button>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">repeat</span></button>
+</div>
+<div class="w-full flex items-center gap-3">
+<span class="text-[10px] text-on-surface-variant w-8 text-right font-medium">12:45</span>
+<div class="flex-1 h-1 bg-surface-container-high rounded-full overflow-hidden relative">
+<div class="absolute top-0 left-0 h-full w-[40%] bg-primary shadow-[0_0_8px_rgba(83,224,118,0.5)]"></div>
+</div>
+<span class="text-[10px] text-on-surface-variant w-8 font-medium">45:12</span>
+</div>
+</div>
+<!-- Volume/Action Controls -->
+<div class="hidden md:flex items-center justify-end gap-4 w-1/3">
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">lyrics</span></button>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">queue_music</span></button>
+<div class="flex items-center gap-2 w-24">
+<span class="material-symbols-outlined text-on-surface-variant text-xl">volume_up</span>
+<div class="flex-1 h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full w-[70%] bg-on-surface-variant"></div>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">open_in_full</span></button>
+</div>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe bg-[#131313]/70 backdrop-blur-2xl lg:hidden font-['Plus_Jakarta_Sans'] text-[10px] font-medium border-t border-white/5">
+<div class="flex flex-col items-center justify-center text-[#BCCBB9]">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#53E076]">
+<span class="material-symbols-outlined">search</span>
+<span>Browse</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#BCCBB9]">
+<span class="material-symbols-outlined">subscriptions</span>
+<span>Library</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#BCCBB9]">
+<span class="material-symbols-outlined">favorite</span>
+<span>Liked</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#BCCBB9]">
+<span class="material-symbols-outlined">queue_music</span>
+<span>Playlists</span>
+</div>
+</nav>
+</body></html>

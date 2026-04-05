@@ -1,0 +1,73 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "on-secondary-fixed": "#002108",
+        "on-tertiary-container": "#730a1b",
+        "error-container": "#93000a",
+        "tertiary": "#ffb3b3",
+        "primary-container": "#1db954",
+        "inverse-on-surface": "#313030",
+        "on-tertiary-fixed": "#400009",
+        "on-primary-fixed-variant": "#005320",
+        "inverse-primary": "#006e2d",
+        "on-secondary-fixed-variant": "#195127",
+        "on-surface-variant": "#bccbb9",
+        "inverse-surface": "#e5e2e1",
+        "surface-dim": "#131313",
+        "tertiary-container": "#ff767b",
+        "on-surface": "#e5e2e1",
+        "on-background": "#e5e2e1",
+        "surface": "#131313",
+        "secondary": "#99d59d",
+        "primary": "#53e076",
+        "on-error": "#690005",
+        "surface-tint": "#53e076",
+        "surface-bright": "#393939",
+        "tertiary-fixed-dim": "#ffb3b3",
+        "on-primary-fixed": "#002108",
+        "primary-fixed-dim": "#53e076",
+        "surface-variant": "#353534",
+        "secondary-fixed-dim": "#99d59d",
+        "surface-container-highest": "#353534",
+        "on-error-container": "#ffdad6",
+        "surface-container-low": "#1c1b1b",
+        "on-tertiary-fixed-variant": "#881d28",
+        "outline": "#869585",
+        "on-secondary": "#003914",
+        "on-primary-container": "#004118",
+        "surface-container": "#201f1f",
+        "primary-fixed": "#72fe8f",
+        "on-primary": "#003914",
+        "surface-container-high": "#2a2a2a",
+        "error": "#ffb4ab",
+        "outline-variant": "#3d4a3d",
+        "on-tertiary": "#680114",
+        "secondary-container": "#1c5329",
+        "tertiary-fixed": "#ffdad9",
+        "surface-container-lowest": "#0e0e0e",
+        "secondary-fixed": "#b5f1b8",
+        "on-secondary-container": "#8cc690",
+        "background": "#131313"
+      },
+      borderRadius: {
+        "DEFAULT": "0.25rem",
+        "lg": "12px",
+        "xl": "16px",
+        "full": "9999px"
+      },
+      fontFamily: {
+        "headline": ["Plus Jakarta Sans", "sans-serif"],
+        "body": ["Plus Jakarta Sans", "sans-serif"],
+        "label": ["Plus Jakarta Sans", "sans-serif"]
+      }
+    },
+  },
+  plugins: [],
+}
