@@ -6,7 +6,7 @@ import { surahs } from '../data/surahs';
 export default function Player() {
   const { surahId } = useParams();
   const navigate = useNavigate();
-  const { currentTrack, isPlaying, play, pause, resume, progress, duration, currentTime, setProgress } = usePlayerStore();
+  const { currentTrack, isPlaying, play, pause, resume, progress, duration, currentTime, setProgress, isLyricsVisible, toggleLyrics } = usePlayerStore();
   
   const [verses, setVerses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,12 +26,12 @@ export default function Player() {
     if (!track) return;
     setLoading(true);
     // Fetch verses with translations=85 (Abdul Haleem - English) and fields=text_uthmani
-    fetch(`https://api.quran.com/api/v4/verses/by_chapter/${track.id}?language=en&words=false&translations=85`)
+    fetch(`https://api.quran.com/api/v4/verses/by_chapter/${track.id}?language=en&words=false&translations=85&per_page=300`)
       .then(res => res.json())
       .then(data => {
          // Also need arabic text. In v4 you often fetch text_uthmani separately, or include it
          // the quran.com api typically needs fields=text_uthmani to return the arabic string along with translations
-         return fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${track.id}`)
+         return fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${track.id}&per_page=300`)
             .then(arRes => arRes.json())
             .then(arData => {
                const combined = data.verses.map((v, i) => ({
@@ -84,14 +84,14 @@ export default function Player() {
           <p className="text-[10px] tracking-[0.2em] uppercase font-bold text-on-surface-variant group-hover:text-primary transition-colors">PLAYING FROM SURAH</p>
           <h1 className="font-headline text-sm font-extrabold tracking-tight">Surah {track.name}</h1>
         </div>
-        <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest/30 backdrop-blur-md transition-colors">
-          <span className="material-symbols-outlined">more_vert</span>
+        <button onClick={toggleLyrics} className={`w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest/30 backdrop-blur-md transition-colors ${isLyricsVisible ? 'text-primary' : ''}`}>
+          <span className="material-symbols-outlined">lyrics</span>
         </button>
       </header>
 
       <main className="flex-1 flex flex-col lg:flex-row h-full">
         {/* Left Section: Visuals & Controls */}
-        <section className="flex-1 flex flex-col items-center justify-center px-8 pt-24 pb-4 lg:py-0">
+        <section className={`flex-1 flex flex-col items-center justify-center px-8 pt-24 pb-4 lg:py-0 ${isLyricsVisible ? 'hidden lg:flex' : 'flex'}`}>
           
           {/* Artwork */}
           <div className="relative w-full max-w-[420px] aspect-square group shadow-2xl rounded-2xl">
@@ -109,9 +109,6 @@ export default function Player() {
                 <h2 className="text-3xl lg:text-4xl font-headline font-bold tracking-tighter text-on-surface leading-tight">Surah {track.name}</h2>
                 <p className="text-lg text-primary font-medium mt-1">{track.reciter}</p>
               </div>
-              <button className="text-on-surface-variant hover:text-primary hover:scale-110 transition-all mb-1">
-                <span className="material-symbols-outlined text-3xl">favorite_border</span>
-              </button>
             </div>
           </div>
 
@@ -128,10 +125,7 @@ export default function Player() {
           </div>
 
           {/* Controls */}
-          <div className="mt-8 flex items-center justify-between w-full max-w-[420px] z-10">
-            <button className="text-on-surface-variant hover:text-primary transition-colors">
-              <span className="material-symbols-outlined text-2xl">shuffle</span>
-            </button>
+          <div className="mt-8 flex items-center justify-center w-full max-w-[420px] z-10">
             <div className="flex items-center gap-6 lg:gap-8">
               <button className="text-on-surface hover:text-primary transition-colors active:scale-90">
                 <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>skip_previous</span>
@@ -148,14 +142,11 @@ export default function Player() {
                 <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>skip_next</span>
               </button>
             </div>
-            <button className="text-on-surface-variant hover:text-primary transition-colors">
-              <span className="material-symbols-outlined text-2xl">repeat</span>
-            </button>
           </div>
         </section>
 
         {/* Right Section: Synchronized Text */}
-        <section className="flex-1 lg:h-full bg-surface-container-low/20 lg:bg-surface-container-low/40 lg:backdrop-blur-xl lg:rounded-l-[40px] px-8 lg:px-16 py-12 lg:py-24 overflow-y-auto custom-scrollbar border-l border-white/5 pb-32 lg:pb-24">
+        <section className={`flex-1 lg:h-full bg-surface-container-low/20 lg:bg-surface-container-low/40 lg:backdrop-blur-xl lg:rounded-l-[40px] px-8 lg:px-16 py-12 lg:py-24 overflow-y-auto custom-scrollbar border-l border-white/5 pb-32 lg:pb-24 ${isLyricsVisible ? 'block' : 'hidden'}`}>
           <div className="max-w-2xl mx-auto space-y-12 lg:space-y-16">
             {loading ? (
                 <div className="flex items-center justify-center text-primary animate-pulse py-20">

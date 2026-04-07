@@ -7,7 +7,9 @@ export const usePlayerStore = create((set) => ({
   duration: 0,
   currentTime: 0,
   volume: 1,
+  isLyricsVisible: true,
 
+  toggleLyrics: () => set((state) => ({ isLyricsVisible: !state.isLyricsVisible })),
   play: (track) => set({ currentTrack: track, isPlaying: true }),
   pause: () => set({ isPlaying: false }),
   resume: () => set({ isPlaying: true }),
