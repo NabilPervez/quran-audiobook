@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 export default function PersistentPlayerBar() {
   const audioRef = useRef(null);
   const navigate = useNavigate();
-  const { currentTrack, isPlaying, play, pause, resume, progress, duration, currentTime, setProgress, setDuration } = usePlayerStore();
+  const { currentTrack, isPlaying, play, pause, resume, progress, duration, currentTime, setProgress, setDuration, isLyricsVisible, toggleLyrics } = usePlayerStore();
   
   // Local state for UI updates
   const [localProgress, setLocalProgress] = useState(0);
@@ -87,17 +87,11 @@ export default function PersistentPlayerBar() {
             <h4 className="text-sm font-bold truncate text-on-surface">Surah {currentTrack.name}</h4>
             <p className="text-xs text-on-surface-variant truncate">{currentTrack.reciter}</p>
           </div>
-          <button className="text-on-surface-variant hover:text-primary transition-colors hidden sm:block" onClick={(e) => e.stopPropagation()}>
-            <span className="material-symbols-outlined text-lg">favorite_border</span>
-          </button>
         </div>
 
         {/* Player Controls (Desktop Center, Mobile Right) */}
         <div className="flex flex-col items-center gap-1 lg:gap-2 flex-1 lg:w-1/3 max-w-xl justify-end lg:justify-center">
           <div className="flex items-center gap-4 lg:gap-6">
-            <button className="text-on-surface-variant hover:text-on-surface hidden lg:block" onClick={(e) => e.stopPropagation()}>
-                <span className="material-symbols-outlined text-xl">shuffle</span>
-            </button>
             <button className="text-on-surface hover:text-primary transition-colors hidden lg:block" onClick={(e) => e.stopPropagation()}>
                 <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>skip_previous</span>
             </button>
@@ -111,9 +105,6 @@ export default function PersistentPlayerBar() {
             </button>
             <button className="text-on-surface hover:text-primary transition-colors hidden lg:block" onClick={(e) => e.stopPropagation()}>
                 <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>skip_next</span>
-            </button>
-            <button className="text-on-surface-variant hover:text-on-surface hidden lg:block" onClick={(e) => e.stopPropagation()}>
-                <span className="material-symbols-outlined text-xl">repeat</span>
             </button>
           </div>
           
@@ -137,11 +128,8 @@ export default function PersistentPlayerBar() {
 
         {/* Volume/Action Controls (Desktop only) */}
         <div className="hidden lg:flex items-center justify-end gap-4 w-1/3" onClick={(e) => e.stopPropagation()}>
-          <button className="text-on-surface-variant hover:text-on-surface">
+          <button onClick={toggleLyrics} className={`hover:text-primary transition-colors ${isLyricsVisible ? 'text-primary' : 'text-on-surface-variant'}`}>
               <span className="material-symbols-outlined text-lg">lyrics</span>
-          </button>
-          <button className="text-on-surface-variant hover:text-on-surface">
-              <span className="material-symbols-outlined text-lg">queue_music</span>
           </button>
           <div className="flex items-center gap-2 w-24 group cursor-pointer">
             <span className="material-symbols-outlined text-on-surface-variant text-lg group-hover:text-on-surface transition-colors">volume_up</span>
