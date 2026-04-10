@@ -1,39 +1,46 @@
 import React from 'react';
+import { usePlayerStore } from '../store/playerStore';
+import { surahs } from '../data/surahs';
 
 export default function Browse() {
-  const categories = [
-    { title: 'Makkah Surahs', color: 'bg-[#8C33FF]', transform: 'rotate-12', icon: 'mosque' },
-    { title: 'Madinah Surahs', color: 'bg-[#1DB954]', transform: '-rotate-6', icon: 'location_city' },
-    { title: 'Patience', color: 'bg-[#E91E63]', transform: 'rotate-12', icon: 'hourglass_empty' },
-    { title: 'Gratitude', color: 'bg-[#FF9800]', transform: '-rotate-12', icon: 'favorite' },
-    { title: 'Stories of Prophets', color: 'bg-[#2196F3]', transform: 'rotate-45', icon: 'auto_stories' },
-    { title: 'By Juz', color: 'bg-[#009688]', transform: 'rotate-0', icon: 'format_list_numbered' },
-    { title: 'Inner Peace', color: 'bg-[#3F51B5]', transform: '-rotate-6', icon: 'spa' },
-    { title: 'Global Reciters', color: 'bg-[#607D8B]', transform: 'rotate-12', icon: 'record_voice_over' },
-  ];
+  const { play, currentTrack, isPlaying, pause } = usePlayerStore();
+  
+  const handlePlay = (track) => {
+    if (currentTrack?.id === track.id && isPlaying) {
+      pause();
+    } else {
+      play(track);
+    }
+  };
 
   return (
-    <section className="px-6 lg:px-8 pt-6 pb-20">
-      <h2 className="text-2xl font-extrabold tracking-tight mb-8 font-headline text-on-surface">Browse All</h2>
+    <section className="px-4 md:px-8 pt-6 pb-20">
+      <h2 className="text-2xl font-extrabold tracking-tight mb-8 font-headline text-on-surface">Browse Surahs</h2>
       
-      {/* Bento Grid Categories */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-6">
-        {categories.map((cat, idx) => (
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
+        {surahs.map((surah) => (
           <div 
-            key={idx} 
-            className={`relative overflow-hidden aspect-square rounded-xl p-4 lg:p-6 cursor-pointer ${cat.color} hover:scale-105 transition-transform duration-300 shadow-lg`}
+             key={surah.id} 
+             className="bg-surface-container-low p-3 md:p-4 rounded-xl hover:bg-surface-container-high transition-all duration-300 group cursor-pointer" 
+             onClick={() => handlePlay(surah)}
           >
-            <h3 className="text-lg lg:text-xl font-bold tracking-tight text-white drop-shadow-md z-10 relative leading-tight">{cat.title}</h3>
-            
-            <span 
-                className={`material-symbols-outlined absolute -bottom-4 -right-2 text-[100px] opacity-20 text-white ${cat.transform}`} 
-                style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-                {cat.icon}
-            </span>
-            
-            {/* Optional glow for specific cards */}
-            <div className="absolute inset-0 bg-white opacity-0 hover:opacity-10 transition-opacity"></div>
+              <div className="relative aspect-square rounded-lg overflow-hidden mb-3 md:mb-4 bg-surface-container shadow-inner">
+                  <img 
+                      alt={surah.name} 
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
+                      src={`https://images.unsplash.com/photo-1542816417-0983c9c9ad53?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80&sig=${surah.id}`}
+                  />
+                  <button 
+                      onClick={(e) => { e.stopPropagation(); handlePlay(surah); }}
+                      className="absolute bottom-2 right-2 w-10 h-10 md:w-12 md:h-12 bg-primary rounded-full flex items-center justify-center shadow-lg opacity-100 md:opacity-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all hover:scale-105"
+                  >
+                      <span className="material-symbols-outlined text-on-primary text-xl md:text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                         {currentTrack?.id === surah.id && isPlaying ? 'pause' : 'play_arrow'}
+                      </span>
+                  </button>
+              </div>
+              <h3 className="font-bold text-sm md:text-base truncate text-on-surface text-center md:text-left">{surah.id}. {surah.name}</h3>
+              <p className="text-[10px] md:text-xs text-on-surface-variant mt-1 truncate text-center md:text-left">{surah.reciter}</p>
           </div>
         ))}
       </div>
