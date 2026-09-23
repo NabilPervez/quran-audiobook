@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Download, Minus, Plus, RotateCcw, Upload } from 'lucide-react';
 import { NARRATION } from '../data/catalog';
 import { TEXT_SCALES, useSettingsStore } from '../stores/settingsStore';
@@ -193,6 +194,12 @@ export default function Settings() {
           </p>
           <p>
             <span className="text-on-surface font-semibold">Text:</span> Arabic (Uthmani script) and English from Quran.com.
+          </p>
+          <p>
+            <Link to="/privacy" className="text-primary font-semibold underline underline-offset-4">
+              Privacy policy
+            </Link>{' '}
+            · No accounts, no tracking. Your data stays on this device.
           </p>
         </div>
       </Section>

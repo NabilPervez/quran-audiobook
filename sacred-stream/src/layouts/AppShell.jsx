@@ -6,6 +6,9 @@ import MiniPlayer from '../components/MiniPlayer';
 import PlayerSheet from '../components/player/PlayerSheet';
 import Toaster from '../components/Toaster';
 import NoteEditor from '../components/NoteEditor';
+import UpdatePrompt from '../components/UpdatePrompt';
+import { useOnline } from '../offline/useOnline';
+import { WifiOff } from 'lucide-react';
 import { getSurah } from '../data/catalog';
 import { usePlayerStore } from '../stores/playerStore';
 import { usePlayerSheet } from '../hooks/usePlayerSheet';
@@ -15,6 +18,7 @@ export default function AppShell() {
   const { openId } = usePlayerSheet();
   const sheetOpen = Boolean(openId && getSurah(openId));
   const { pathname } = useLocation();
+  const online = useOnline();
 
   // New page, start at the top (opening/closing the sheet only changes the query string).
   // (Braces matter: scrollTo returns a Promise in recent Chrome, which an effect must not return.)
@@ -39,6 +43,11 @@ export default function AppShell() {
         </a>
         <SideRail />
         <main id="main" className={`flex-1 min-w-0 ${bottomPad}`}>
+          {!online && (
+            <p role="status" className="sticky top-0 z-20 flex items-center justify-center gap-2 bg-surface-container-highest text-sm font-semibold py-2 px-4">
+              <WifiOff size={16} aria-hidden /> You’re offline. Downloaded surahs still play.
+            </p>
+          )}
           <Outlet />
         </main>
         <MiniPlayer />
@@ -46,6 +55,7 @@ export default function AppShell() {
       </div>
       {sheetOpen && <PlayerSheet key={openId} surahId={openId} />}
       <NoteEditor />
+      <UpdatePrompt />
       <Toaster />
     </>
   );

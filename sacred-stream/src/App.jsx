@@ -10,6 +10,9 @@ import Bookmarks from './pages/library/Bookmarks';
 import History from './pages/library/History';
 import Notes from './pages/library/Notes';
 import Settings from './pages/Settings';
+import Privacy from './pages/Privacy';
+import Downloads from './pages/library/Downloads';
+import { reconcileDownloads } from './offline/downloads';
 import { engine } from './audio/engine';
 import { useHotkeys } from './hooks/useHotkeys';
 
@@ -24,6 +27,7 @@ export default function App() {
   // Load the last-played surah (paused) so "Resume" is one tap away.
   useEffect(() => {
     engine.restore();
+    reconcileDownloads();
   }, []);
 
   return (
@@ -35,10 +39,12 @@ export default function App() {
           <Route path="surah/:id" element={<SurahDetail />} />
           <Route path="search" element={<Search />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="privacy" element={<Privacy />} />
           <Route path="library" element={<Library />}>
             <Route index element={<Bookmarks />} />
             <Route path="notes" element={<Notes />} />
             <Route path="history" element={<History />} />
+            <Route path="downloads" element={<Downloads />} />
           </Route>
           <Route path="player/:surahId" element={<LegacyPlayerRedirect />} />
           {/* Routes from the old Spotify-style layout */}

@@ -12,6 +12,7 @@ import { usePlayerSheet } from '../hooks/usePlayerSheet';
 import Cover from '../components/Cover';
 import VerseList from '../components/reader/VerseList';
 import ReaderSettings from '../components/reader/ReaderSettings';
+import DownloadButton from '../components/DownloadButton';
 
 function PrimaryAction({ surah, entry }) {
   const isCurrent = usePlayerStore((s) => s.surahId === surah.id);
@@ -111,6 +112,7 @@ export default function SurahDetail() {
         >
           <BookOpen size={18} aria-hidden /> Read along
         </button>
+        <DownloadButton surah={surah} variant="pill" />
         {entry?.finished ? (
           <button type="button" onClick={() => reset(surah.id)} className="h-12 px-4 rounded-full text-on-surface-variant font-semibold flex items-center gap-2 hover:text-on-surface hover:bg-surface-container">
             <RotateCcw size={18} aria-hidden /> Mark as not finished

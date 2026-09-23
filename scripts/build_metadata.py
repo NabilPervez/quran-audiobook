@@ -72,6 +72,7 @@ def main() -> None:
             "revelation": "meccan" if c["revelation_place"] == "makkah" else "medinan",
             "verseCount": c["verses_count"],
             "durationSec": round(MP3(mp3).info.length, 2),
+            "sizeBytes": mp3.stat().st_size,
             "audioUrl": f"/audio/{mp3.name}",
             "juzStart": juz_start[c["id"]],
         })

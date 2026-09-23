@@ -19,6 +19,8 @@ import SleepControl from './SleepControl';
 import BookmarkButton from './BookmarkButton';
 import ReaderSettings from '../reader/ReaderSettings';
 import { useBookmarkStore } from '../../stores/bookmarkStore';
+import { useDownloadStore } from '../../offline/downloads';
+import { useOnline } from '../../offline/useOnline';
 import VerseList from '../reader/VerseList';
 
 const DISMISS_DRAG_PX = 120;
@@ -41,6 +43,8 @@ function StartButton({ surah, fromVerse }) {
   const otherId = usePlayerStore((s) => s.surahId);
   const other = otherId && otherId !== surah.id ? getSurah(otherId) : null;
   const resumeAt = resumePointFor(surah.id);
+  const online = useOnline();
+  const downloaded = useDownloadStore((s) => s.status[surah.id] === 'done');
   const label = fromVerse
     ? `Play from verse ${fromVerse.n}`
     : resumeAt > 0
@@ -57,7 +61,11 @@ function StartButton({ surah, fromVerse }) {
       >
         <Play size={22} fill="currentColor" aria-hidden /> {label}
       </button>
-      {other && <p className="text-xs text-on-surface-variant">This will stop {other.nameTranslit}</p>}
+      {!online && !downloaded ? (
+        <p className="text-xs text-on-surface-variant">You’re offline and this surah isn’t downloaded.</p>
+      ) : (
+        other && <p className="text-xs text-on-surface-variant">This will stop {other.nameTranslit}</p>
+      )}
     </div>
   );
 }

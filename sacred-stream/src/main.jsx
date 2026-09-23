@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import '@fontsource-variable/plus-jakarta-sans';
 import '@fontsource-variable/literata';
 import '@fontsource/amiri-quran/arabic-400.css';
+import './pwa/install';
 import App from './App.jsx';
 import './index.css';
 

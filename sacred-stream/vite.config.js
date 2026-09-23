@@ -6,16 +6,29 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // Updates wait for the listener to tap Reload (see UpdatePrompt), so playback is never cut off.
+      registerType: 'prompt',
       includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon-180x180.png'],
       manifest: {
+        id: '/',
         name: 'The Sacred Stream',
         short_name: 'Sacred Stream',
         description: 'The Quran in English, narrated. Listen, read along, and pick up where you left off.',
         theme_color: '#131313',
         background_color: '#131313',
         display: 'standalone',
-        orientation: 'portrait',
+        start_url: '/',
+        scope: '/',
+        lang: 'en',
+        dir: 'ltr',
+        categories: ['books', 'education', 'lifestyle'],
+        prefer_related_applications: false,
+        shortcuts: [
+          { name: 'Continue listening', short_name: 'Continue', url: '/', icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }] },
+          { name: 'Contents', url: '/contents', icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }] },
+          { name: 'Library', url: '/library', icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }] },
+          { name: 'Downloads', url: '/library/downloads', icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }] },
+        ],
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },

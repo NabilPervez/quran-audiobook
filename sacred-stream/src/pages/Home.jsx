@@ -7,6 +7,7 @@ import { useProgressStore, fractionListened } from '../stores/progressStore';
 import Cover from '../components/Cover';
 import { useBookmarkStore } from '../stores/bookmarkStore';
 import BookmarkItem from '../components/library/BookmarkItem';
+import InstallCard from '../components/InstallCard';
 
 const SHORT_SURAHS = surahs.filter((s) => s.juzStart === 30);
 
@@ -175,6 +176,7 @@ export default function Home() {
         </section>
       )}
 
+      <InstallCard />
       <RecentBookmarks />
       <Journey bySurah={bySurah} />
       <ShortSurahs />

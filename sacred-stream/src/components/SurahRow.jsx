@@ -1,6 +1,8 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Pause, Play } from 'lucide-react';
+import { CheckCircle2, Pause, Play } from 'lucide-react';
+import { useDownloadStore } from '../offline/downloads';
+import { useOnline } from '../offline/useOnline';
 import { formatDuration } from '../lib/format';
 import { playOrToggle, useIsPlayingSurah } from '../lib/playback';
 import { usePlayerStore } from '../stores/playerStore';
@@ -12,9 +14,12 @@ function SurahRow({ surah, subtitle }) {
   const isCurrent = usePlayerStore((s) => s.surahId === surah.id);
   const isPlaying = useIsPlayingSurah(surah.id);
   const fraction = useProgressStore((s) => fractionListened(s.bySurah[surah.id]));
+  const downloaded = useDownloadStore((s) => s.status[surah.id] === 'done');
+  const online = useOnline();
+  const unavailable = !online && !downloaded;
 
   return (
-    <li className={`group flex items-center gap-3 rounded-xl pr-2 transition-colors ${isCurrent ? 'bg-surface-container' : 'hover:bg-surface-container-low'}`} style={{ contentVisibility: 'auto', containIntrinsicSize: '0 72px' }}>
+    <li className={`group flex items-center gap-3 rounded-xl pr-2 transition-colors ${isCurrent ? 'bg-surface-container' : 'hover:bg-surface-container-low'} ${unavailable ? 'opacity-50' : ''}`} style={{ contentVisibility: 'auto', containIntrinsicSize: '0 72px' }}>
       <Link to={`/surah/${surah.id}`} className="flex items-center gap-3 flex-1 min-w-0 py-3 pl-2">
         <span className={`w-8 text-center text-sm font-bold tabular ${isCurrent ? 'text-primary' : 'text-on-surface-variant'}`}>{surah.id}</span>
         <span className="flex-1 min-w-0">
@@ -24,8 +29,9 @@ function SurahRow({ surah, subtitle }) {
               {surah.nameArabic}
             </span>
           </span>
-          <span className="block text-xs text-on-surface-variant truncate mt-0.5">
-            {subtitle ?? `${surah.meaning} · ${formatDuration(surah.durationSec)} · ${surah.verseCount} verses`}
+          <span className="flex items-center gap-1 text-xs text-on-surface-variant mt-0.5 min-w-0">
+            {downloaded && <CheckCircle2 size={12} className="text-primary shrink-0" aria-label="Downloaded" />}
+            <span className="truncate">{subtitle ?? `${surah.meaning} · ${formatDuration(surah.durationSec)} · ${surah.verseCount} verses`}</span>
           </span>
         </span>
       </Link>
