@@ -63,9 +63,11 @@ export default {
         "full": "9999px"
       },
       fontFamily: {
-        "headline": ["Plus Jakarta Sans", "sans-serif"],
-        "body": ["Plus Jakarta Sans", "sans-serif"],
-        "label": ["Plus Jakarta Sans", "sans-serif"]
+        "headline": ["Plus Jakarta Sans Variable", "system-ui", "sans-serif"],
+        "body": ["Plus Jakarta Sans Variable", "system-ui", "sans-serif"],
+        "label": ["Plus Jakarta Sans Variable", "system-ui", "sans-serif"],
+        "read": ["Literata Variable", "Georgia", "serif"],
+        "arabic": ["Amiri Quran", "Scheherazade New", "Traditional Arabic", "serif"]
       }
     },
   },
