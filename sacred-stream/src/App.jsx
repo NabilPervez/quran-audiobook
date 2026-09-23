@@ -1,16 +1,25 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import AppShell from './layouts/AppShell';
 import Home from './pages/Home';
 import Contents from './pages/Contents';
-import Player from './pages/Player';
+import SurahDetail from './pages/SurahDetail';
+import Search from './pages/Search';
 import { engine } from './audio/engine';
 import { useHotkeys } from './hooks/useHotkeys';
+
+// Old full-page player URLs now open the surah page with the player sheet on top.
+function LegacyPlayerRedirect() {
+  const { surahId } = useParams();
+  return <Navigate to={`/surah/${surahId}?player=${surahId}`} replace />;
+}
 
 export default function App() {
   useHotkeys();
   // Load the last-played surah (paused) so "Resume" is one tap away.
-  useEffect(() => engine.restore(), []);
+  useEffect(() => {
+    engine.restore();
+  }, []);
 
   return (
     <BrowserRouter>
@@ -18,12 +27,14 @@ export default function App() {
         <Route element={<AppShell />}>
           <Route index element={<Home />} />
           <Route path="contents" element={<Contents />} />
-          {/* Old routes from the Spotify-style layout */}
+          <Route path="surah/:id" element={<SurahDetail />} />
+          <Route path="search" element={<Search />} />
+          <Route path="player/:surahId" element={<LegacyPlayerRedirect />} />
+          {/* Routes from the old Spotify-style layout */}
           <Route path="browse" element={<Navigate to="/contents" replace />} />
           <Route path="library" element={<Navigate to="/contents" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
-        <Route path="/player/:surahId" element={<Player />} />
       </Routes>
     </BrowserRouter>
   );

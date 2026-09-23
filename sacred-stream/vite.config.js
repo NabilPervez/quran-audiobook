@@ -45,9 +45,9 @@ export default defineConfig({
             options: { cacheName: 'font-cache', expiration: { maxEntries: 30 } },
           },
           {
-            urlPattern: /^https:\/\/api\.quran\.com\/.*/,
-            handler: 'NetworkFirst',
-            options: { cacheName: 'api-cache', networkTimeoutSeconds: 10 },
+            urlPattern: /\/data\/text\/\d{3}\.json$/,
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'text-cache', expiration: { maxEntries: 120 } },
           },
         ],
       },

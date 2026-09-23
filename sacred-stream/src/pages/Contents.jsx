@@ -4,12 +4,7 @@ import { surahs, juzs, getSurah, TOTAL_DURATION_SEC, NARRATION } from '../data/c
 import { formatDuration } from '../lib/format';
 import { useProgressStore } from '../stores/progressStore';
 import SurahRow from '../components/SurahRow';
-
-const normalise = (s) =>
-  s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ'’`\-\s]/g, '');
+import { matchesSurah } from '../lib/search';
 
 const FILTERS = [
   { id: 'all', label: 'All' },
@@ -18,16 +13,6 @@ const FILTERS = [
   { id: 'done', label: 'Finished' },
 ];
 
-function matches(surah, q) {
-  if (!q) return true;
-  if (String(surah.id) === q) return true;
-  const nq = normalise(q);
-  return (
-    normalise(surah.nameTranslit).includes(nq) ||
-    normalise(surah.meaning).includes(nq) ||
-    surah.nameArabic.includes(q.trim())
-  );
-}
 
 export default function Contents() {
   const [view, setView] = useState('surah');
@@ -45,7 +30,7 @@ export default function Contents() {
     return (id) => filter === 'all' || state(id) === filter;
   }, [bySurah, filter]);
 
-  const list = surahs.filter((s) => matches(s, q) && passesFilter(s.id));
+  const list = surahs.filter((s) => matchesSurah(s, q) && passesFilter(s.id));
 
   return (
     <div className="max-w-3xl mx-auto px-4 lg:px-8 pt-6">
@@ -114,7 +99,7 @@ export default function Contents() {
       ) : (
         <div className="mt-2 space-y-6">
           {juzs.map((j) => {
-            const rows = j.surahs.map((r) => ({ ...r, surah: getSurah(r.id) })).filter((r) => matches(r.surah, q) && passesFilter(r.id));
+            const rows = j.surahs.map((r) => ({ ...r, surah: getSurah(r.id) })).filter((r) => matchesSurah(r.surah, q) && passesFilter(r.id));
             if (!rows.length) return null;
             return (
               <section key={j.juz} aria-labelledby={`juz-${j.juz}`}>

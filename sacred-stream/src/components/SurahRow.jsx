@@ -15,7 +15,7 @@ function SurahRow({ surah, subtitle }) {
 
   return (
     <li className={`group flex items-center gap-3 rounded-xl pr-2 transition-colors ${isCurrent ? 'bg-surface-container' : 'hover:bg-surface-container-low'}`} style={{ contentVisibility: 'auto', containIntrinsicSize: '0 72px' }}>
-      <Link to={`/player/${surah.id}`} className="flex items-center gap-3 flex-1 min-w-0 py-3 pl-2">
+      <Link to={`/surah/${surah.id}`} className="flex items-center gap-3 flex-1 min-w-0 py-3 pl-2">
         <span className={`w-8 text-center text-sm font-bold tabular ${isCurrent ? 'text-primary' : 'text-on-surface-variant'}`}>{surah.id}</span>
         <span className="flex-1 min-w-0">
           <span className="flex items-baseline justify-between gap-2">

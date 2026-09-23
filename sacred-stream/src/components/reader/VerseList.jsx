@@ -49,15 +49,16 @@ const VerseItem = memo(function VerseItem({ verse, state, showArabic, onPlayFrom
  * Verse-by-verse text. When `activeIndex` >= 0 the list follows the narration,
  * but pauses following for a few seconds whenever the user scrolls by hand.
  */
-export default function VerseList({ verses, activeIndex, showArabic, onPlayFrom, scrollRef }) {
+export default function VerseList({ verses, activeIndex, focusVerse, showArabic, onPlayFrom, scrollRef }) {
   const userScrolledAt = useRef(0);
   const [offscreen, setOffscreen] = useState(false);
   const firstScroll = useRef(true);
 
-  const activeEl = useCallback(
-    () => (activeIndex >= 0 ? document.getElementById(`verse-${verses[activeIndex].n}`) : null),
-    [activeIndex, verses]
-  );
+  // The element to keep in view: the verse being narrated, else a verse from a link (?v=).
+  const activeEl = useCallback(() => {
+    if (activeIndex >= 0) return document.getElementById(`verse-${verses[activeIndex].n}`);
+    return focusVerse ? document.getElementById(`verse-${focusVerse}`) : null;
+  }, [activeIndex, verses, focusVerse]);
 
   const scrollToActive = useCallback(
     (behavior) => {
@@ -71,14 +72,14 @@ export default function VerseList({ verses, activeIndex, showArabic, onPlayFrom,
 
   // Follow the narration.
   useLayoutEffect(() => {
-    if (activeIndex < 0) return;
+    if (activeIndex < 0 && !focusVerse) return;
     if (firstScroll.current) {
       firstScroll.current = false;
       scrollToActive('auto');
       return;
     }
-    if (Date.now() - userScrolledAt.current > USER_SCROLL_GRACE_MS) scrollToActive('smooth');
-  }, [activeIndex, scrollToActive]);
+    if (activeIndex >= 0 && Date.now() - userScrolledAt.current > USER_SCROLL_GRACE_MS) scrollToActive('smooth');
+  }, [activeIndex, focusVerse, scrollToActive]);
 
   // The list may mount while hidden (phone Listen tab). Jump to the active verse
   // whenever the panel goes from hidden to visible.

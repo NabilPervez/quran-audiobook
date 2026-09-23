@@ -27,11 +27,11 @@ function ContinueCard({ surah, entry }) {
         {started ? 'Continue listening' : 'Start listening'}
       </h2>
       <div className="flex gap-4 items-center">
-        <Link to={`/player/${surah.id}`} className="shrink-0" aria-label={`Open ${surah.nameTranslit}`}>
+        <Link to={`/surah/${surah.id}`} className="shrink-0" aria-label={`Open ${surah.nameTranslit}`}>
           <Cover surah={surah} className="w-24 h-24 sm:w-32 sm:h-32 shadow-xl" />
         </Link>
         <div className="min-w-0 flex-1">
-          <Link to={`/player/${surah.id}`} className="block hover:underline underline-offset-4">
+          <Link to={`/surah/${surah.id}`} className="block hover:underline underline-offset-4">
             <p className="text-2xl sm:text-3xl font-extrabold tracking-tight truncate">{surah.nameTranslit}</p>
           </Link>
           <p className="text-on-surface-variant truncate">
@@ -95,7 +95,7 @@ function ShortSurahs() {
       <ul className="flex gap-3 overflow-x-auto no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0 pb-2 snap-x">
         {SHORT_SURAHS.map((s) => (
           <li key={s.id} className="w-32 shrink-0 snap-start">
-            <Link to={`/player/${s.id}`} className="block group">
+            <Link to={`/surah/${s.id}`} className="block group">
               <Cover surah={s} className="w-32 h-32 group-hover:brightness-110 transition" />
               <p className="font-semibold text-sm mt-2 truncate">{s.nameTranslit}</p>
               <p className="text-xs text-on-surface-variant truncate">
@@ -132,7 +132,7 @@ export default function Home() {
           <h2 id="next-heading" className="text-xl font-bold tracking-tight mb-3">
             Up next
           </h2>
-          <Link to={`/player/${upNext.id}`} className="flex items-center gap-4 rounded-xl p-2 -mx-2 hover:bg-surface-container-low transition-colors">
+          <Link to={`/surah/${upNext.id}`} className="flex items-center gap-4 rounded-xl p-2 -mx-2 hover:bg-surface-container-low transition-colors">
             <Cover surah={upNext} showName={false} className="w-14 h-14" />
             <span className="min-w-0 flex-1">
               <span className="block font-bold truncate">{upNext.nameTranslit}</span>

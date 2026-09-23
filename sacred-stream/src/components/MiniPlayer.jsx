@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { Maximize2 } from 'lucide-react';
 import { getSurah } from '../data/catalog';
 import { usePlayerStore } from '../stores/playerStore';
@@ -6,6 +5,7 @@ import { useSettingsStore } from '../stores/settingsStore';
 import { useCurrentTime } from '../audio/timeBus';
 import { formatRemaining } from '../lib/format';
 import Cover from './Cover';
+import { usePlayerSheet } from '../hooks/usePlayerSheet';
 import PlayButton from './player/PlayButton';
 import SkipButton from './player/SkipButton';
 import ChapterButton from './player/ChapterButton';
@@ -36,11 +36,11 @@ function Subtitle({ surah }) {
 
 export default function MiniPlayer() {
   const surahId = usePlayerStore((s) => s.surahId);
-  const navigate = useNavigate();
+  const { open: openSheet } = usePlayerSheet();
   const surah = surahId ? getSurah(surahId) : null;
   if (!surah) return null;
 
-  const open = () => navigate(`/player/${surah.id}`);
+  const open = () => openSheet(surah.id);
 
   return (
     <div

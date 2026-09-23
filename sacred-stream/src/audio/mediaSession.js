@@ -1,4 +1,7 @@
 // Lock-screen, notification, headphone and car controls.
+import { coverDataUrl } from '../lib/coverArt';
+
+let metadataSeq = 0;
 const supported = typeof navigator !== 'undefined' && 'mediaSession' in navigator;
 
 export function bindMediaSession(engine, getSettings) {
@@ -24,15 +27,21 @@ export function bindMediaSession(engine, getSettings) {
 
 export function updateMediaMetadata(surah) {
   if (!supported || typeof MediaMetadata === 'undefined') return;
-  navigator.mediaSession.metadata = new MediaMetadata({
-    title: `${surah.id}. ${surah.nameTranslit} (${surah.meaning})`,
-    artist: 'The Quran in English',
-    album: 'Translation: M.A.S. Abdel Haleem',
-    artwork: [
-      { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-      { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-    ],
-  });
+  const set = (artwork) => {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: `${surah.id}. ${surah.nameTranslit} (${surah.meaning})`,
+      artist: 'The Quran in English',
+      album: 'Translation: M.A.S. Abdel Haleem',
+      artwork,
+    });
+  };
+  // App icon first, then the generated surah cover once it's drawn
+  // (unless another surah has been loaded in the meantime).
+  const seq = ++metadataSeq;
+  set([{ src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png' }]);
+  coverDataUrl(surah)
+    .then((src) => seq === metadataSeq && set([{ src, sizes: '512x512', type: 'image/png' }]))
+    .catch(() => {});
 }
 
 export function updatePositionState(el) {

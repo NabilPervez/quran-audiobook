@@ -1,7 +1,8 @@
-import { Home, ListOrdered } from 'lucide-react';
+import { Home, ListOrdered, Search } from 'lucide-react';
 
-// Library (bookmarks) and Search join this list when those features ship.
+// Library (bookmarks) joins this list when that feature ships.
 export const NAV_ITEMS = [
   { to: '/', label: 'Home', icon: Home, end: true },
   { to: '/contents', label: 'Contents', icon: ListOrdered },
+  { to: '/search', label: 'Search', icon: Search },
 ];

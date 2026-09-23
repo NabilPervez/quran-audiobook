@@ -8,8 +8,14 @@
 
 ## Progress
 
-| Task | Status |
+| Sprint | Status |
 |---|---|
+| 0: Foundation | ✅ Done. Lint is clean, CI workflow, fake UI removed, `scripts/build_metadata.py` → `src/data/catalog.json`, lucide icons, self-hosted fonts, PWA icons. |
+| 1: Playback | ✅ Done. `src/audio/engine.js` + `timeBus.js`, persisted resume, skip/speed/chapter controls, auto-advance, Media Session, sleep timer with fade, mini-player. |
+| 2: Navigation and screens | ✅ Done. Tab bar / side rail (Home, Contents, Search); Home; Contents (Surah/Juz, filters, search); `/surah/:id` detail page; player is now a sheet (`?player=&view=&v=`, back closes it, focus managed, drag to dismiss); full-text verse search; generated covers, also used as lock-screen artwork; verse text served statically from `public/data/text/` (`scripts/build_content.py`). |
+| Deviations | Stayed on JavaScript (no TS migration). |
+
+---|---|
 | Sprint 0 (S0-1 to S0-6) | ✅ Done. Lint is clean, CI workflow added, fake UI removed, `scripts/build_metadata.py` generates `src/data/catalog.json`, lucide icons, self-hosted fonts, PWA icons. |
 | Sprint 1 (S1-1 to S1-7) | ✅ Done. `src/audio/engine.js` + `timeBus.js`, persisted resume, skip/speed/chapter controls, auto-advance, Media Session, sleep timer with fade, new mini-player. Real-device lock-screen check is still pending. |
 | S2-1 App shell | ✅ Tab bar (phones) / side rail (desktop). Tabs are Home and Contents; Library and Search get added when they exist. |
