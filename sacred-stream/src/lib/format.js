@@ -19,6 +19,18 @@ export function formatDuration(sec) {
   return m === 0 ? `${h}h` : `${h}h ${m}m`;
 }
 
+/** "just now", "5 min ago", "3 h ago", "yesterday", "4 days ago", "12 Mar" */
+export function formatRelative(ts, now = Date.now()) {
+  const sec = Math.max(0, (now - ts) / 1000);
+  if (sec < 60) return 'just now';
+  if (sec < 3600) return `${Math.floor(sec / 60)} min ago`;
+  if (sec < 86400) return `${Math.floor(sec / 3600)} h ago`;
+  const days = Math.floor(sec / 86400);
+  if (days === 1) return 'yesterday';
+  if (days < 7) return `${days} days ago`;
+  return new Date(ts).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+}
+
 /** Remaining listening time phrased for humans: "12 min left", "45 sec left" */
 export function formatRemaining(sec) {
   if (!Number.isFinite(sec) || sec <= 0) return 'Finished';

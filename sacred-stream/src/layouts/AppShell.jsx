@@ -4,6 +4,7 @@ import SideRail from '../components/nav/SideRail';
 import TabBar from '../components/nav/TabBar';
 import MiniPlayer from '../components/MiniPlayer';
 import PlayerSheet from '../components/player/PlayerSheet';
+import Toaster from '../components/Toaster';
 import { getSurah } from '../data/catalog';
 import { usePlayerStore } from '../stores/playerStore';
 import { usePlayerSheet } from '../hooks/usePlayerSheet';
@@ -43,6 +44,7 @@ export default function AppShell() {
         <TabBar />
       </div>
       {sheetOpen && <PlayerSheet key={openId} surahId={openId} />}
+      <Toaster />
     </>
   );
 }

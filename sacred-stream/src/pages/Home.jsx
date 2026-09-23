@@ -5,6 +5,8 @@ import { formatDuration, formatRemaining } from '../lib/format';
 import { playOrToggle, useIsPlayingSurah } from '../lib/playback';
 import { useProgressStore, fractionListened } from '../stores/progressStore';
 import Cover from '../components/Cover';
+import { useBookmarkStore } from '../stores/bookmarkStore';
+import BookmarkItem from '../components/library/BookmarkItem';
 
 const SHORT_SURAHS = surahs.filter((s) => s.juzStart === 30);
 
@@ -81,6 +83,29 @@ function Journey({ bySurah }) {
   );
 }
 
+function RecentBookmarks() {
+  // Select the stable array, slice in render (a selector returning a new array loops).
+  const recent = useBookmarkStore((s) => s.items).slice(0, 3);
+  if (!recent.length) return null;
+  return (
+    <section aria-labelledby="bookmarks-heading">
+      <div className="flex items-baseline justify-between mb-2">
+        <h2 id="bookmarks-heading" className="text-xl font-bold tracking-tight">
+          Recent bookmarks
+        </h2>
+        <Link to="/library" className="text-sm font-semibold text-on-surface-variant hover:text-on-surface flex items-center">
+          Library <ChevronRight size={16} aria-hidden />
+        </Link>
+      </div>
+      <ul className="-mx-3">
+        {recent.map((b) => (
+          <BookmarkItem key={b.id} bookmark={b} />
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 function ShortSurahs() {
   return (
     <section aria-labelledby="short-heading">
@@ -145,6 +170,7 @@ export default function Home() {
         </section>
       )}
 
+      <RecentBookmarks />
       <Journey bySurah={bySurah} />
       <ShortSurahs />
     </div>

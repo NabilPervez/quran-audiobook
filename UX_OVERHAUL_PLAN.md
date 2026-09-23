@@ -13,6 +13,8 @@
 | 0: Foundation | ✅ Done. Lint is clean, CI workflow, fake UI removed, `scripts/build_metadata.py` → `src/data/catalog.json`, lucide icons, self-hosted fonts, PWA icons. |
 | 1: Playback | ✅ Done. `src/audio/engine.js` + `timeBus.js`, persisted resume, skip/speed/chapter controls, auto-advance, Media Session, sleep timer with fade, mini-player. |
 | 2: Navigation and screens | ✅ Done. Tab bar / side rail (Home, Contents, Search); Home; Contents (Surah/Juz, filters, search); `/surah/:id` detail page; player is now a sheet (`?player=&view=&v=`, back closes it, focus managed, drag to dismiss); full-text verse search; generated covers, also used as lock-screen artwork; verse text served statically from `public/data/text/` (`scripts/build_content.py`). |
+| 3: Read-along | ✅ UI done: reader settings ("Aa": text size, Arabic/English, follow narration), verse actions (⋯ / right-click / long-press: play from here, bookmark, copy, share), Shift+←/→ verse stepping, `?v=` deep links. ⏸ Exact verse timing dropped by request; highlighting stays length-estimated. |
+| 4: Library (part 1) | ✅ Bookmark store, one-tap bookmark button (player, desktop mini-player, B key) with Undo toast, bookmark markers in the reader, Library tab (Bookmarks: recent / by surah; History), Recent bookmarks on Home. |
 | Deviations | Stayed on JavaScript (no TS migration). |
 
 ---|---|

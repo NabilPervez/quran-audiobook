@@ -1,63 +1,38 @@
-import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { ArrowDown, Play } from 'lucide-react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { ArrowDown } from 'lucide-react';
+import { useSettingsStore } from '../../stores/settingsStore';
+import { useBookmarkStore } from '../../stores/bookmarkStore';
+import VerseItem from './VerseItem';
+import { useVerseActions } from './VerseActions';
 
 const USER_SCROLL_GRACE_MS = 5000;
 
-const VerseItem = memo(function VerseItem({ verse, state, showArabic, onPlayFrom }) {
-  const active = state === 'active';
-  return (
-    <article
-      id={`verse-${verse.n}`}
-      aria-current={active ? 'true' : undefined}
-      onClick={() => {
-        // Tapping a verse plays from it, unless the user is selecting text to copy.
-        if (!window.getSelection()?.toString()) onPlayFrom(verse);
-      }}
-      className={`group relative rounded-2xl px-4 py-5 sm:px-6 cursor-pointer transition-colors duration-300 ${
-        active ? 'bg-surface-container-high shadow-[inset_3px_0_0_theme(colors.primary)]' : 'hover:bg-surface-container-low'
-      } ${state === 'past' ? 'opacity-70' : ''}`}
-    >
-      <header className="flex items-center gap-2 mb-3">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onPlayFrom(verse);
-          }}
-          aria-label={`Play from verse ${verse.n}`}
-          className={`h-7 min-w-7 px-2 rounded-full text-xs font-bold tabular flex items-center gap-1 transition-colors ${
-            active ? 'bg-primary text-on-primary' : 'bg-surface-container-highest text-on-surface-variant group-hover:text-on-surface'
-          }`}
-        >
-          <Play size={10} fill="currentColor" className="hidden group-hover:block" aria-hidden />
-          {verse.key}
-        </button>
-      </header>
-      {showArabic && verse.ar && (
-        <p lang="ar" dir="rtl" className="arabic text-[1.65rem] sm:text-3xl text-on-surface mb-3">
-          {verse.ar}
-        </p>
-      )}
-      <p className={`font-read text-[1.075rem] sm:text-lg leading-[1.75] ${active ? 'text-on-surface' : 'text-on-surface/85'}`}>
-        {verse.en}
-      </p>
-    </article>
-  );
-});
-
 /**
- * Verse-by-verse text. When `activeIndex` >= 0 the list follows the narration,
- * but pauses following for a few seconds whenever the user scrolls by hand.
+ * Verse-by-verse text for one surah, honouring the reader settings (Arabic,
+ * English, text size, auto-scroll).
+ *
+ * When `activeIndex` >= 0 the list follows the narration, pausing for a few
+ * seconds whenever the user scrolls by hand. `scrollRef` is the scrolling
+ * container; omit it when the page itself scrolls (no follow mode then).
  */
-export default function VerseList({ verses, activeIndex, focusVerse, showArabic, onPlayFrom, scrollRef }) {
+export default function VerseList({ surahId, verses, activeIndex = -1, focusVerse, onPlayFrom, scrollRef }) {
+  const { showArabic, showEnglish, textScale, autoScroll } = useSettingsStore();
+  const bookmarkedItems = useBookmarkStore((s) => s.items);
+  const bookmarked = useMemo(
+    () => new Set(bookmarkedItems.filter((b) => b.surahId === surahId).map((b) => b.verse)),
+    [bookmarkedItems, surahId]
+  );
+  const { openFor, sheet } = useVerseActions(surahId, onPlayFrom);
+
+  const listRef = useRef(null);
   const userScrolledAt = useRef(0);
   const [offscreen, setOffscreen] = useState(false);
   const firstScroll = useRef(true);
 
   // The element to keep in view: the verse being narrated, else a verse from a link (?v=).
   const activeEl = useCallback(() => {
-    if (activeIndex >= 0) return document.getElementById(`verse-${verses[activeIndex].n}`);
-    return focusVerse ? document.getElementById(`verse-${focusVerse}`) : null;
+    const n = activeIndex >= 0 ? verses[activeIndex].n : focusVerse;
+    return n ? listRef.current?.querySelector(`[data-verse="${n}"]`) : null;
   }, [activeIndex, verses, focusVerse]);
 
   const scrollToActive = useCallback(
@@ -70,7 +45,7 @@ export default function VerseList({ verses, activeIndex, focusVerse, showArabic,
     [activeEl]
   );
 
-  // Follow the narration.
+  // Jump to the target once, then follow the narration if auto-scroll is on.
   useLayoutEffect(() => {
     if (activeIndex < 0 && !focusVerse) return;
     if (firstScroll.current) {
@@ -78,13 +53,15 @@ export default function VerseList({ verses, activeIndex, focusVerse, showArabic,
       scrollToActive('auto');
       return;
     }
-    if (activeIndex >= 0 && Date.now() - userScrolledAt.current > USER_SCROLL_GRACE_MS) scrollToActive('smooth');
-  }, [activeIndex, focusVerse, scrollToActive]);
+    if (autoScroll && activeIndex >= 0 && Date.now() - userScrolledAt.current > USER_SCROLL_GRACE_MS) {
+      scrollToActive('smooth');
+    }
+  }, [activeIndex, focusVerse, autoScroll, scrollToActive]);
 
   // The list may mount while hidden (phone Listen tab). Jump to the active verse
   // whenever the panel goes from hidden to visible.
   useEffect(() => {
-    const root = scrollRef.current;
+    const root = scrollRef?.current;
     if (!root) return;
     let wasHidden = root.clientHeight === 0;
     const ro = new ResizeObserver(() => {
@@ -101,7 +78,7 @@ export default function VerseList({ verses, activeIndex, focusVerse, showArabic,
 
   // Track manual scrolling and whether the active verse is visible.
   useEffect(() => {
-    const root = scrollRef.current;
+    const root = scrollRef?.current;
     if (!root) return;
     const markUser = () => {
       userScrolledAt.current = Date.now();
@@ -110,7 +87,7 @@ export default function VerseList({ verses, activeIndex, focusVerse, showArabic,
     const onScroll = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        const el = activeEl();
+        const el = activeIndex >= 0 ? activeEl() : null;
         if (!el) return setOffscreen(false);
         const r = el.getBoundingClientRect();
         const box = root.getBoundingClientRect();
@@ -129,22 +106,25 @@ export default function VerseList({ verses, activeIndex, focusVerse, showArabic,
       root.removeEventListener('keydown', markUser);
       root.removeEventListener('scroll', onScroll);
     };
-  }, [scrollRef, activeEl]);
+  }, [scrollRef, activeEl, activeIndex]);
 
   return (
     <>
-      <div className="space-y-1">
+      <div ref={listRef} className="space-y-1" style={{ fontSize: `${textScale}rem` }}>
         {verses.map((v, i) => (
           <VerseItem
             key={v.n}
             verse={v}
-            state={activeIndex < 0 ? 'future' : i < activeIndex ? 'past' : i === activeIndex ? 'active' : 'future'}
+            state={activeIndex < 0 ? 'idle' : i < activeIndex ? 'past' : i === activeIndex ? 'active' : 'future'}
+            bookmarked={bookmarked.has(v.n)}
             showArabic={showArabic}
+            showEnglish={showEnglish || !showArabic}
             onPlayFrom={onPlayFrom}
+            onActions={openFor}
           />
         ))}
       </div>
-      {offscreen && activeIndex >= 0 && (
+      {offscreen && (
         <button
           type="button"
           onClick={() => {
@@ -156,6 +136,7 @@ export default function VerseList({ verses, activeIndex, focusVerse, showArabic,
           <ArrowDown size={16} aria-hidden /> Back to current verse
         </button>
       )}
+      {sheet}
     </>
   );
 }

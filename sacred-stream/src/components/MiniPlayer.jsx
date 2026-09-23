@@ -12,6 +12,7 @@ import ChapterButton from './player/ChapterButton';
 import Scrubber from './player/Scrubber';
 import SpeedControl from './player/SpeedControl';
 import SleepControl from './player/SleepControl';
+import BookmarkButton from './player/BookmarkButton';
 
 function ThinProgress() {
   const { t, d } = useCurrentTime();
@@ -82,6 +83,7 @@ export default function MiniPlayer() {
         <div className="hidden lg:flex items-center justify-end gap-1 w-1/4">
           <SpeedControl align="end" />
           <SleepControl align="end" />
+          <BookmarkButton />
           <button type="button" onClick={open} aria-label="Open full player" className="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high">
             <Maximize2 size={18} aria-hidden />
           </button>

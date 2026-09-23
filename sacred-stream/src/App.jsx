@@ -5,6 +5,9 @@ import Home from './pages/Home';
 import Contents from './pages/Contents';
 import SurahDetail from './pages/SurahDetail';
 import Search from './pages/Search';
+import Library from './pages/library/Library';
+import Bookmarks from './pages/library/Bookmarks';
+import History from './pages/library/History';
 import { engine } from './audio/engine';
 import { useHotkeys } from './hooks/useHotkeys';
 
@@ -29,10 +32,13 @@ export default function App() {
           <Route path="contents" element={<Contents />} />
           <Route path="surah/:id" element={<SurahDetail />} />
           <Route path="search" element={<Search />} />
+          <Route path="library" element={<Library />}>
+            <Route index element={<Bookmarks />} />
+            <Route path="history" element={<History />} />
+          </Route>
           <Route path="player/:surahId" element={<LegacyPlayerRedirect />} />
           {/* Routes from the old Spotify-style layout */}
           <Route path="browse" element={<Navigate to="/contents" replace />} />
-          <Route path="library" element={<Navigate to="/contents" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

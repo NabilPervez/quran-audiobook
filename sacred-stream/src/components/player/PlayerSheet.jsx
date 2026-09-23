@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ChevronDown, Languages, Loader2, Play } from 'lucide-react';
+import { ChevronDown, Loader2, Play } from 'lucide-react';
 import { getSurah } from '../../data/catalog';
 import { engine } from '../../audio/engine';
 import { usePlayerStore } from '../../stores/playerStore';
 import { useProgressStore, resumePointFor } from '../../stores/progressStore';
-import { useSettingsStore } from '../../stores/settingsStore';
 import { useSurahVerses } from '../../hooks/useSurahVerses';
 import { useActiveVerse } from '../../hooks/useActiveVerse';
 import { usePlayerSheet } from '../../hooks/usePlayerSheet';
@@ -17,6 +16,8 @@ import ChapterButton from './ChapterButton';
 import Scrubber from './Scrubber';
 import SpeedControl from './SpeedControl';
 import SleepControl from './SleepControl';
+import BookmarkButton from './BookmarkButton';
+import ReaderSettings from '../reader/ReaderSettings';
 import VerseList from '../reader/VerseList';
 
 const DISMISS_DRAG_PX = 120;
@@ -93,6 +94,7 @@ function ListenPanel({ surah, isCurrent, verses, fromVerse }) {
           <div className="flex items-center justify-center gap-6">
             <SpeedControl />
             <SleepControl />
+            <BookmarkButton />
           </div>
         </>
       ) : (
@@ -104,7 +106,6 @@ function ListenPanel({ surah, isCurrent, verses, fromVerse }) {
 
 function ReadPanel({ surah, isCurrent, verses, error, retry, focusVerse }) {
   const scrollRef = useRef(null);
-  const showArabic = useSettingsStore((s) => s.showArabic);
   const activeIndex = useActiveVerse(verses, isCurrent);
 
   const playFrom = useCallback(
@@ -140,10 +141,10 @@ function ReadPanel({ surah, isCurrent, verses, error, retry, focusVerse }) {
           </div>
         ) : (
           <VerseList
+            surahId={surah.id}
             verses={verses}
             activeIndex={activeIndex}
             focusVerse={focusVerse}
-            showArabic={showArabic}
             onPlayFrom={playFrom}
             scrollRef={scrollRef}
           />
@@ -184,7 +185,6 @@ export default function PlayerSheet({ surahId }) {
   const surah = getSurah(surahId);
   const { view, verse, close, setView } = usePlayerSheet();
   const isCurrent = usePlayerStore((s) => s.surahId === surah.id);
-  const showArabic = useSettingsStore((s) => s.showArabic);
   const { verses, error, retry } = useSurahVerses(surah.id);
   const closeRef = useRef(null);
   const { dy, handlers } = useDragToDismiss(close);
@@ -248,15 +248,7 @@ export default function PlayerSheet({ surahId }) {
           Surah {surah.id} · {surah.nameTranslit}
         </p>
 
-        <button
-          type="button"
-          onClick={() => useSettingsStore.getState().set({ showArabic: !showArabic })}
-          aria-pressed={showArabic}
-          aria-label="Show Arabic text"
-          className={`w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-container-high ${showArabic ? 'text-primary' : 'text-on-surface-variant'}`}
-        >
-          <Languages size={22} aria-hidden />
-        </button>
+        <ReaderSettings />
       </header>
 
       <div className="flex-1 min-h-0 lg:grid lg:grid-cols-[minmax(22rem,30rem)_1fr]">

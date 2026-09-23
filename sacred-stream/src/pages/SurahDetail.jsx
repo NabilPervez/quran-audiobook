@@ -1,15 +1,17 @@
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { BookOpen, Check, ChevronLeft, ChevronRight, Loader2, Pause, Play, RotateCcw } from 'lucide-react';
+import { useCallback } from 'react';
 import { getSurah } from '../data/catalog';
 import { engine } from '../audio/engine';
 import { formatDuration, formatRemaining, formatTime } from '../lib/format';
 import { useIsPlayingSurah } from '../lib/playback';
 import { usePlayerStore } from '../stores/playerStore';
 import { useProgressStore, fractionListened, resumePointFor } from '../stores/progressStore';
-import { useSettingsStore } from '../stores/settingsStore';
 import { useSurahVerses } from '../hooks/useSurahVerses';
 import { usePlayerSheet } from '../hooks/usePlayerSheet';
 import Cover from '../components/Cover';
+import VerseList from '../components/reader/VerseList';
+import ReaderSettings from '../components/reader/ReaderSettings';
 
 function PrimaryAction({ surah, entry }) {
   const isCurrent = usePlayerStore((s) => s.surahId === surah.id);
@@ -30,8 +32,14 @@ function PrimaryAction({ surah, entry }) {
 
 function VerseText({ surah }) {
   const { verses, error, retry } = useSurahVerses(surah.id);
-  const showArabic = useSettingsStore((s) => s.showArabic);
   const { open } = usePlayerSheet();
+  const playFrom = useCallback(
+    (v) => {
+      engine.load(surah.id, { at: v.start });
+      open(surah.id, { view: 'read', verse: v.n });
+    },
+    [surah.id, open]
+  );
 
   if (error) {
     return (
@@ -50,31 +58,7 @@ function VerseText({ surah }) {
       </p>
     );
   }
-  return (
-    <ol className="space-y-1">
-      {verses.map((v) => (
-        <li key={v.n} id={`verse-${v.n}`} className="group rounded-2xl px-3 sm:px-5 py-4 hover:bg-surface-container-low transition-colors">
-          <button
-            type="button"
-            onClick={() => {
-              engine.load(surah.id, { at: v.start });
-              open(surah.id, { view: 'read', verse: v.n });
-            }}
-            className="h-7 px-2.5 mb-2 rounded-full bg-surface-container-highest text-xs font-bold tabular text-on-surface-variant group-hover:text-on-surface flex items-center gap-1"
-            aria-label={`Play from verse ${v.n}`}
-          >
-            <Play size={10} fill="currentColor" aria-hidden /> {v.key}
-          </button>
-          {showArabic && (
-            <p lang="ar" dir="rtl" className="arabic text-2xl sm:text-3xl mb-2">
-              {v.ar}
-            </p>
-          )}
-          <p className="font-read text-[1.05rem] leading-[1.75] text-on-surface/90">{v.en}</p>
-        </li>
-      ))}
-    </ol>
-  );
+  return <VerseList surahId={surah.id} verses={verses} onPlayFrom={playFrom} />;
 }
 
 export default function SurahDetail() {
@@ -136,6 +120,9 @@ export default function SurahDetail() {
             <Check size={18} aria-hidden /> Mark as finished
           </button>
         )}
+        <div className="ml-auto">
+          <ReaderSettings />
+        </div>
       </div>
 
       <section className="mt-8" aria-labelledby="text-heading">
