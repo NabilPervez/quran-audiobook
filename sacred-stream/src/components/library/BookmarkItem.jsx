@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, MoreHorizontal, Play, Trash2 } from 'lucide-react';
+import { BookOpen, MoreHorizontal, NotebookPen, Play, Trash2 } from 'lucide-react';
 import { getSurah } from '../../data/catalog';
 import { useSurahVerses } from '../../hooks/useSurahVerses';
 import { useOpenBookmark } from '../../hooks/useOpenBookmark';
 import { formatRelative, formatTime } from '../../lib/format';
 import { removeBookmark } from '../../lib/verseActions';
+import { openNote } from '../../stores/uiStore';
 import ActionSheet from '../ActionSheet';
 
 export default function BookmarkItem({ bookmark: b, showSurah = true }) {
@@ -47,6 +48,7 @@ export default function BookmarkItem({ bookmark: b, showSurah = true }) {
           onClose={() => setMenu(false)}
           items={[
             { icon: Play, label: 'Play from bookmark', onSelect: () => openBookmark(b) },
+            { icon: NotebookPen, label: b.note ? 'Edit note' : 'Add note', onSelect: () => openNote(b) },
             { icon: BookOpen, label: `Go to ${surah.nameTranslit}`, onSelect: () => navigate(`/surah/${b.surahId}`) },
             { icon: Trash2, label: 'Remove bookmark', onSelect: () => removeBookmark(b), destructive: true },
           ]}

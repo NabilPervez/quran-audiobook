@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
-import { Bookmark, BookmarkMinus, Copy, Play, Share2 } from 'lucide-react';
+import { Bookmark, BookmarkMinus, Copy, NotebookPen, Play, Share2 } from 'lucide-react';
 import { getSurah } from '../../data/catalog';
 import { useBookmarkStore } from '../../stores/bookmarkStore';
 import { bookmarkVerse, copyVerse, removeBookmark, shareVerse } from '../../lib/verseActions';
+import { openNote } from '../../stores/uiStore';
 import ActionSheet from '../ActionSheet';
 
 /**
@@ -26,6 +27,12 @@ export function useVerseActions(surahId, onPlayFrom) {
         bookmark
           ? { icon: BookmarkMinus, label: 'Remove bookmark', onSelect: () => removeBookmark(bookmark) }
           : { icon: Bookmark, label: 'Bookmark', onSelect: () => bookmarkVerse(surahId, verse.n, verse.start) },
+        {
+          icon: NotebookPen,
+          label: bookmark?.note ? 'Edit note' : 'Add note',
+          // A note lives on a bookmark, so adding one bookmarks the verse quietly first.
+          onSelect: () => openNote(bookmark ?? useBookmarkStore.getState().add({ surahId, verse: verse.n, time: verse.start })),
+        },
         { icon: Copy, label: 'Copy text', onSelect: () => copyVerse(surahId, verse) },
         { icon: Share2, label: 'Share', onSelect: () => shareVerse(surahId, verse) },
       ]}

@@ -18,6 +18,7 @@ import SpeedControl from './SpeedControl';
 import SleepControl from './SleepControl';
 import BookmarkButton from './BookmarkButton';
 import ReaderSettings from '../reader/ReaderSettings';
+import { useBookmarkStore } from '../../stores/bookmarkStore';
 import VerseList from '../reader/VerseList';
 
 const DISMISS_DRAG_PX = 120;
@@ -72,6 +73,8 @@ function VerseCounter({ verses, total }) {
 }
 
 function ListenPanel({ surah, isCurrent, verses, fromVerse }) {
+  const bookmarks = useBookmarkStore((s) => s.items);
+  const marks = bookmarks.filter((b) => b.surahId === surah.id).map((b) => b.time);
   const describe = useCallback((t) => (verses?.length ? `Verse ${verses[verseIndexAt(verses, t)].n}` : null), [verses]);
   return (
     <section aria-label="Listen" className="flex flex-col items-center justify-center gap-6 px-6 py-6 min-h-full w-full max-w-md mx-auto">
@@ -89,7 +92,7 @@ function ListenPanel({ surah, isCurrent, verses, fromVerse }) {
       </div>
       {isCurrent ? (
         <>
-          <Scrubber fallbackDuration={surah.durationSec} describe={describe} />
+          <Scrubber fallbackDuration={surah.durationSec} describe={describe} marks={marks} />
           <Transport />
           <div className="flex items-center justify-center gap-6">
             <SpeedControl />

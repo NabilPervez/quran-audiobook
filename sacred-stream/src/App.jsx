@@ -8,6 +8,8 @@ import Search from './pages/Search';
 import Library from './pages/library/Library';
 import Bookmarks from './pages/library/Bookmarks';
 import History from './pages/library/History';
+import Notes from './pages/library/Notes';
+import Settings from './pages/Settings';
 import { engine } from './audio/engine';
 import { useHotkeys } from './hooks/useHotkeys';
 
@@ -32,8 +34,10 @@ export default function App() {
           <Route path="contents" element={<Contents />} />
           <Route path="surah/:id" element={<SurahDetail />} />
           <Route path="search" element={<Search />} />
+          <Route path="settings" element={<Settings />} />
           <Route path="library" element={<Library />}>
             <Route index element={<Bookmarks />} />
+            <Route path="notes" element={<Notes />} />
             <Route path="history" element={<History />} />
           </Route>
           <Route path="player/:surahId" element={<LegacyPlayerRedirect />} />

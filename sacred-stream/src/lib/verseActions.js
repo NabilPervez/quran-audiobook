@@ -4,26 +4,27 @@ import { timeBus } from '../audio/timeBus';
 import { usePlayerStore } from '../stores/playerStore';
 import { useBookmarkStore } from '../stores/bookmarkStore';
 import { toast } from '../stores/toastStore';
+import { openNote } from '../stores/uiStore';
 import { verseIndexAt } from './verseTiming';
 
-/** Bookmark a verse and confirm with an Undo toast. `onAddNote(bookmark)` wires the toast's note action. */
-export function bookmarkVerse(surahId, verse, time, onAddNote) {
+/** Bookmark a verse and confirm with a toast offering "Add note" and "Undo". */
+export function bookmarkVerse(surahId, verse, time, onAddNote = openNote) {
   const store = useBookmarkStore.getState();
   const existing = store.items.find((b) => b.surahId === surahId && b.verse === verse);
   if (existing) {
-    toast(`Already bookmarked ${surahId}:${verse}`, onAddNote ? [{ label: 'Note', onClick: () => onAddNote(existing) }] : []);
+    toast(`Already bookmarked ${surahId}:${verse}`, [{ label: existing.note ? 'Edit note' : 'Add note', onClick: () => onAddNote(existing) }]);
     return existing;
   }
   const bookmark = store.add({ surahId, verse, time });
   toast(`Bookmarked ${surahId}:${verse}`, [
-    ...(onAddNote ? [{ label: 'Add note', onClick: () => onAddNote(bookmark) }] : []),
+    { label: 'Add note', onClick: () => onAddNote(bookmark) },
     { label: 'Undo', onClick: () => useBookmarkStore.getState().remove(bookmark.id) },
   ]);
   return bookmark;
 }
 
 /** Bookmark whatever verse is playing right now. */
-export async function bookmarkCurrentPosition(onAddNote) {
+export async function bookmarkCurrentPosition(onAddNote = openNote) {
   const surahId = usePlayerStore.getState().surahId;
   if (!surahId) return null;
   const { t } = timeBus.get();

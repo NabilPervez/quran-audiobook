@@ -9,7 +9,7 @@ import { formatTime } from '../../lib/format';
  * Pointer drags only seek on release so audio never stutters; keyboard seeks immediately.
  * `describe(t)` optionally labels a position, e.g. "Verse 23".
  */
-export default function Scrubber({ fallbackDuration = 0, describe }) {
+export default function Scrubber({ fallbackDuration = 0, describe, marks = [] }) {
   const { t, d: liveD } = useCurrentTime();
   const rate = useSettingsStore((s) => s.rate);
   const [drag, setDrag] = useState(null);
@@ -28,25 +28,37 @@ export default function Scrubber({ fallbackDuration = 0, describe }) {
 
   return (
     <div className="w-full" onClick={(e) => e.stopPropagation()}>
-      <input
-        type="range"
-        className="seek"
-        min={0}
-        max={d || 1}
-        step={1}
-        value={value}
-        style={{ '--pct': `${pct}%` }}
-        aria-label="Seek"
-        aria-valuetext={`${formatTime(value)} of ${formatTime(d)}${label ? `, ${label}` : ''}`}
-        onPointerDown={() => setDrag(t)}
-        onPointerUp={commit}
-        onPointerCancel={() => setDrag(null)}
-        onChange={(e) => {
-          const v = Number(e.target.value);
-          if (drag != null) setDrag(v);
-          else engine.seek(v);
-        }}
-      />
+      <div className="relative">
+        {/* Bookmark ticks, drawn behind the thumb. */}
+        {d > 0 &&
+          marks.map((m) => (
+            <span
+              key={m}
+              aria-hidden
+              className="absolute top-[3px] w-0.5 h-3.5 rounded-full bg-primary pointer-events-none"
+              style={{ left: `calc(7px + (100% - 14px) * ${Math.min(1, m / d)})` }}
+            />
+          ))}
+        <input
+          type="range"
+          className="seek"
+          min={0}
+          max={d || 1}
+          step={1}
+          value={value}
+          style={{ '--pct': `${pct}%` }}
+          aria-label="Seek"
+          aria-valuetext={`${formatTime(value)} of ${formatTime(d)}${label ? `, ${label}` : ''}`}
+          onPointerDown={() => setDrag(t)}
+          onPointerUp={commit}
+          onPointerCancel={() => setDrag(null)}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            if (drag != null) setDrag(v);
+            else engine.seek(v);
+          }}
+        />
+      </div>
       <div className="flex justify-between items-center text-xs font-medium text-on-surface-variant tabular mt-0.5">
         <span>{formatTime(value)}</span>
         {drag != null && label ? <span className="text-primary font-bold">{label}</span> : null}

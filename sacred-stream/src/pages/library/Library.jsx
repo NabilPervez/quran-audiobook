@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 
 const TABS = [
   { to: '/library', label: 'Bookmarks', end: true },
+  { to: '/library/notes', label: 'Notes' },
   { to: '/library/history', label: 'History' },
 ];
 

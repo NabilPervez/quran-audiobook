@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ChevronRight, Pause, Play } from 'lucide-react';
+import { ChevronRight, Pause, Play, Settings as SettingsIcon } from 'lucide-react';
 import { surahs, getSurah, TOTAL_DURATION_SEC } from '../data/catalog';
 import { formatDuration, formatRemaining } from '../lib/format';
 import { playOrToggle, useIsPlayingSurah } from '../lib/playback';
@@ -145,9 +145,14 @@ export default function Home() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
-      <header>
-        <p className="text-on-surface-variant text-sm">Assalamu alaikum</p>
-        <h1 className="text-3xl font-extrabold tracking-tight">{greeting()}</h1>
+      <header className="flex items-start justify-between">
+        <div>
+          <p className="text-on-surface-variant text-sm">Assalamu alaikum</p>
+          <h1 className="text-3xl font-extrabold tracking-tight">{greeting()}</h1>
+        </div>
+        <Link to="/settings" aria-label="Settings" className="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container lg:hidden">
+          <SettingsIcon size={22} aria-hidden />
+        </Link>
       </header>
 
       <ContinueCard surah={current} entry={bySurah[current.id]} />

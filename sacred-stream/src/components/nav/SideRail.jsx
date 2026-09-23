@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { Settings } from 'lucide-react';
 import { NAV_ITEMS } from './navItems';
 import { NARRATION } from '../../data/catalog';
 
@@ -30,7 +31,18 @@ export default function SideRail() {
           ))}
         </ul>
       </nav>
-      <p className="mt-auto px-3 pb-24 text-[11px] leading-relaxed text-on-surface-variant">
+      <NavLink
+        to="/settings"
+        className={({ isActive }) =>
+          `mt-auto flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+            isActive ? 'bg-surface-container-high text-on-surface' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
+          }`
+        }
+      >
+        <Settings size={20} aria-hidden />
+        Settings
+      </NavLink>
+      <p className="px-3 pb-24 text-[11px] leading-relaxed text-on-surface-variant">
         Translation: {NARRATION.translation}
         <br />
         Narration: {NARRATION.narrator}

@@ -5,6 +5,7 @@ import TabBar from '../components/nav/TabBar';
 import MiniPlayer from '../components/MiniPlayer';
 import PlayerSheet from '../components/player/PlayerSheet';
 import Toaster from '../components/Toaster';
+import NoteEditor from '../components/NoteEditor';
 import { getSurah } from '../data/catalog';
 import { usePlayerStore } from '../stores/playerStore';
 import { usePlayerSheet } from '../hooks/usePlayerSheet';
@@ -44,6 +45,7 @@ export default function AppShell() {
         <TabBar />
       </div>
       {sheetOpen && <PlayerSheet key={openId} surahId={openId} />}
+      <NoteEditor />
       <Toaster />
     </>
   );
