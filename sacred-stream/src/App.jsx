@@ -1,26 +1,30 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import MainLayout from './layouts/MainLayout';
+import { useEffect } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import AppShell from './layouts/AppShell';
 import Home from './pages/Home';
-import Browse from './pages/Browse';
+import Contents from './pages/Contents';
 import Player from './pages/Player';
-import Library from './pages/Library';
-import PersistentPlayerBar from './components/PersistentPlayerBar';
+import { engine } from './audio/engine';
+import { useHotkeys } from './hooks/useHotkeys';
 
-function App() {
+export default function App() {
+  useHotkeys();
+  // Load the last-played surah (paused) so "Resume" is one tap away.
+  useEffect(() => engine.restore(), []);
+
   return (
     <BrowserRouter>
-      {/* Persistent Audio Bar at root level to prevent unmounting and audio stuttering */}
-      <PersistentPlayerBar />
       <Routes>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/browse" element={<Browse />} />
-          <Route path="/library" element={<Library />} />
+        <Route element={<AppShell />}>
+          <Route index element={<Home />} />
+          <Route path="contents" element={<Contents />} />
+          {/* Old routes from the Spotify-style layout */}
+          <Route path="browse" element={<Navigate to="/contents" replace />} />
+          <Route path="library" element={<Navigate to="/contents" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route path="/player/:surahId" element={<Player />} />
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;
